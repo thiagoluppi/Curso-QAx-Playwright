@@ -6,7 +6,8 @@ test('Deve poder cadastrar uma nova tarefa @debug', async ({ page }) => {
     await page.goto('http://localhost:3000')
 
     const inputTaskName = page.locator('input[class*=InputNewTask]')
-    await inputTaskName.fill(faker.lorem.paragraph())
+    // Usando o faker.lorem.paragraph ele acaba criando textos muitos grandes, então vamos mudar:
+    await inputTaskName.fill(faker.lorem.words())
 
     // Usando xpath:
     // await page.click('xpath=//button[contains(text(), "Create")]')
