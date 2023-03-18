@@ -6,6 +6,21 @@ test('Deve poder cadastrar uma nova tarefa @debug @regression', async ({ page, r
     const taskName = 'teste'
 
     await request.delete(`http://localhost:3333/helper/tasks/${taskName}`)
+    /*
+    Quando você usa await request.delete('someUrl'),
+    a resposta da solicitação HTTP DELETE é retornada como um objeto HTTPResponse. 
+    Você pode acessar várias informações sobre a resposta HTTP a partir desse objeto.
+
+    Aqui estão alguns exemplos do que você pode acessar usando o objeto HTTPResponse:
+
+    result.status(): retorna o código de status HTTP da resposta.
+    result.statusText(): retorna a mensagem de status HTTP da resposta.
+    result.headers(): retorna um objeto com os cabeçalhos HTTP da resposta.
+    result.text(): retorna o corpo da resposta como uma string.
+    result.json(): retorna o corpo da resposta como um objeto JSON.
+    Você pode usar console.log(result.<algumaCoisa>) para exibir o valor de uma propriedade específica. Por exemplo, console.log(result.status()) exibirá o código de status HTTP da resposta.
+    */
+
 
     await page.goto('http://localhost:3000')
 
