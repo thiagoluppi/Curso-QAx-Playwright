@@ -5,7 +5,7 @@ import { faker } from '@faker-js/faker'
 test('Deve poder cadastrar uma nova tarefa @debug @regression', async ({ page, request }) => {
     const taskName = 'teste'
 
-    await request.delete(`http://localhost:3333/helper/tasks/${taskName}`)
+    const result = await request.delete(`http://localhost:3333/helper/tasks/${taskName}`)
     /*
     Quando você usa await request.delete('someUrl'),
     a resposta da solicitação HTTP DELETE é retornada como um objeto HTTPResponse. 
@@ -18,8 +18,16 @@ test('Deve poder cadastrar uma nova tarefa @debug @regression', async ({ page, r
     result.headers(): retorna um objeto com os cabeçalhos HTTP da resposta.
     result.text(): retorna o corpo da resposta como uma string.
     result.json(): retorna o corpo da resposta como um objeto JSON.
-    Você pode usar console.log(result.<algumaCoisa>) para exibir o valor de uma propriedade específica. Por exemplo, console.log(result.status()) exibirá o código de status HTTP da resposta.
+    Você pode usar console.log(result.<algumaCoisa>) para exibir o valor de uma propriedade específica. 
+    Por exemplo, console.log(result.status()) exibirá o código de status HTTP da resposta.
     */
+
+    console.log(`O status code do request é: ${result.status()}`)
+    console.log(`O body do request é: ${result.statusText()}`)
+    console.log(`O header do request é: ${result.headers()}`)
+    console.log(`O body do request como text é: ${result.text()}`)
+    // console.log(`O body do request como json é: ${result.json()}`)
+
 
 
     await page.goto('http://localhost:3000')
