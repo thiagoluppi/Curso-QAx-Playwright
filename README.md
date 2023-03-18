@@ -12,6 +12,10 @@ $ cd Documents/GitHub/QAx/Curso-QAx-Playwright/apps/web
 $ npm run dev
 
 
+# Para rodar os testes com @debug:
+$ npm run debug
+
+
 
 
 
