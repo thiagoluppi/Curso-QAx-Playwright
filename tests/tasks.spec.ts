@@ -3,9 +3,9 @@ import { faker } from '@faker-js/faker'
 
 
 test('Deve poder cadastrar uma nova tarefa @debug @regression', async ({ page, request }) => {
-    const taskName = 'teste'
+    let taskName = 'teste'
 
-    const result = await request.delete(`http://localhost:3333/helper/tasks/${taskName}`)
+    let result = await request.delete(`http://localhost:3333/helper/tasks/${taskName}`)
     /*
     Quando você usa await request.delete('someUrl'),
     a resposta da solicitação HTTP DELETE é retornada como um objeto HTTPResponse. 
@@ -24,9 +24,29 @@ test('Deve poder cadastrar uma nova tarefa @debug @regression', async ({ page, r
 
     console.log(`O status code do request é: ${result.status()}`)
     console.log(`O body do request é: ${result.statusText()}`)
-    console.log(`O header do request é: ${result.headers()}`)
-    console.log(`O body do request como text é: ${result.text()}`)
+    // console.log(`O header do request é: ${result.headers()}`)
+    // console.log(`O body do request como text é: ${result.text()}`)
     // console.log(`O body do request como json é: ${result.json()}`)
+
+    // console.log('')
+
+
+    taskName = 'Cadastro pelo back'
+    await request.delete(`http://localhost:3333/helper/tasks/${taskName}`)
+
+    const postData = {
+        name: 'Cadastro pelo back',
+        is_done: false
+    }
+
+    result = await request.post('http://localhost:3333/tasks', {
+        data: postData
+    })
+
+    console.log(`O status code do request é: ${result.status()}`)
+    console.log(`O body do request é: ${result.statusText()}`)
+    // console.log(`O header do request é: ${result.headers()}`)
+    // console.log(`O body do request como text é: ${result.text()}`)
 
 
 
@@ -34,13 +54,18 @@ test('Deve poder cadastrar uma nova tarefa @debug @regression', async ({ page, r
 
     const inputTaskName = page.locator('input[class*=InputNewTask]')
 
-
+    taskName = 'Cadastro pelo front'
     await inputTaskName.fill(taskName)
+
+
+
     // Usando o faker.lorem.paragraph ele acaba criando textos muitos grandes, então vamos mudar:
     // await inputTaskName.fill(faker.lorem.words())
 
     // Usando xpath:
     // await page.click('xpath=//button[contains(text(), "Create")]')
+
+
 
     await page.click('css=button >> text=Create')
 })
