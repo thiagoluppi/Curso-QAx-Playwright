@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "debug":      "npx playwright test --grep @debug --debug",
-    "regression": "npx playwright test --grep @regression"
+    "regression": "npx playwright test --grep @regression",
+    "temp": "npx playwright test --grep @temp --debug"
   },
   "keywords": [],
   "author": "",
