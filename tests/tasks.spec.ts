@@ -28,30 +28,18 @@ test('Deve poder cadastrar uma nova tarefa @debug @regression', async ({ page, r
 
     // console.log('')
 
-
-
     // Dado que eu tenho uma nova tarefa
-    let taskName = 'teste'
-    let result = await request.delete(`http://localhost:3333/helper/tasks/${taskName}`)
-
-
-    // await page.pause()
-    // E que eu cadastre pelo back end
-    const taskNameBack = 'Cadastro pelo back'
-    await request.delete(`http://localhost:3333/helper/tasks/${taskNameBack}`)
-
-    // await page.pause()
-
-    const postData = {
+    const payload = {
         name: 'Cadastro pelo back',
         is_done: false
     }
+    // E que eu a cadastre pelo back end
+    await request.delete(`http://localhost:3333/helper/tasks/${payload.name}`)
 
-    result = await request.post('http://localhost:3333/tasks', {
-        data: postData
+    const result = await request.post('http://localhost:3333/tasks', {
+        data: payload
     })
-
-    // await page.pause()
+    expect(result.ok()).toBeTruthy
 
     console.log(`O status code do request é: ${result.status()}`)
     console.log(`O body do request é: ${result.statusText()}`)
@@ -59,32 +47,42 @@ test('Deve poder cadastrar uma nova tarefa @debug @regression', async ({ page, r
     // console.log(`O body do request como text é: ${result.text()}`)
 
 
-    // E que eu cadastre pelo front end
+    // E que eu a cadastre pelo front end
     await page.goto('http://localhost:3000')
 
-    // await page.pause()
-
     const inputTaskName = page.locator('input[class*=InputNewTask]')
-
-    // await page.pause()
 
     const taskNameFront = 'Cadastro pelo front'
     await request.delete(`http://localhost:3333/helper/tasks/${taskNameFront}`)
     await inputTaskName.fill(taskNameFront)
 
-    // Usando o faker.lorem.paragraph ele acaba criando textos muitos grandes, então vamos mudar:
-    // await inputTaskName.fill(faker.lorem.words())
-
-    // Usando xpath:
-    // await page.click('xpath=//button[contains(text(), "Create")]')
-
     await page.click('css=button >> text=Create')
 
-    // Então essa tarefa deve ser exibida na lista
-    // const target = page.getByTestId('task-item')
+    // Então essas tarefas devem ser exibidas na lista
     const targetFront = page.locator(`[data-testid="task-item"]:has-text("${taskNameFront}")`)
-    await expect(targetFront).toHaveText(taskNameFront)
+    await expect(targetFront).toBeVisible()
 
-    const targetBack = page.locator(`[data-testid="task-item"]:has-text("${taskNameBack}")`)
-    await expect(targetBack).toHaveText(taskNameBack)
+    const targetBack = page.locator(`[data-testid="task-item"]:has-text("${payload.name}")`)
+    await expect(targetBack).toBeVisible()
+})
+
+test('não deve permitir tarefa duplicada @debug @regression', async ({ page, request }) => {
+    const payload = {
+        name: 'Comprar Ketchup',
+        is_done: false
+    }
+
+    await request.delete(`http://localhost:3333/helper/tasks/${payload.name}`)
+    const result = await request.post('http://localhost:3333/tasks', {
+        data: payload
+    })
+    expect(result.ok()).toBeTruthy
+
+    await page.goto('http://localhost:3000')
+    const inputTaskName = page.locator('input[class*=InputNewTask]')
+    await inputTaskName.fill(payload.name)
+    await page.click('css=button >> text=Create')
+
+    const target = page.locator('#swal2-html-container')
+    await expect(target).toHaveText('Task already exists!')
 })
