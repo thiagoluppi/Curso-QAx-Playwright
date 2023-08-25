@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test'
-import { TaskModel } from './task.model'
-// import { faker } from '@faker-js/faker'
+import { TaskModel } from './fixtures/task.model'
+
+import { deleteTaskByHelper, postTask } from './support/helpers'
 
 
 test('Deve poder cadastrar uma nova tarefa @debug @regression', async ({ page, request }) => {
@@ -36,19 +37,10 @@ test('Deve poder cadastrar uma nova tarefa @debug @regression', async ({ page, r
         name: 'Cadastro pelo back',
         is_done: false
     }
+
     // E que eu a cadastre pelo back end
-    await request.delete(`http://localhost:3333/helper/tasks/${payload.name}`)
-
-    const result = await request.post('http://localhost:3333/tasks', {
-        data: payload
-    })
-    expect(result.ok()).toBeTruthy
-
-    console.log(`O status code do request é: ${result.status()}`)
-    console.log(`O body do request é: ${result.statusText()}`)
-    // console.log(`O header do request é: ${result.headers()}`)
-    // console.log(`O body do request como text é: ${result.text()}`)
-
+    await deleteTaskByHelper(request, payload.name)
+    await postTask(request, payload)
 
     // E que eu a cadastre pelo front end
     await page.goto('http://localhost:3000')
@@ -75,11 +67,8 @@ test('não deve permitir tarefa duplicada @debug @regression', async ({ page, re
         is_done: false
     }
 
-    await request.delete(`http://localhost:3333/helper/tasks/${payload.name}`)
-    const result = await request.post('http://localhost:3333/tasks', {
-        data: payload
-    })
-    expect(result.ok()).toBeTruthy
+    await deleteTaskByHelper(request, payload.name)
+    await postTask(request, payload)
 
     await page.goto('http://localhost:3000')
     const inputTaskName = page.locator('input[class*=InputNewTask]')
