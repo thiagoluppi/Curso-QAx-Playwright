@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+import { TaskModel } from './task.model'
 // import { faker } from '@faker-js/faker'
 
 
@@ -20,16 +21,18 @@ test('Deve poder cadastrar uma nova tarefa @debug @regression', async ({ page, r
     Por exemplo, console.log(result.status()) exibirá o código de status HTTP da resposta.
     */
 
-    // console.log(`O status code do request é: ${result.status()}`)
-    // console.log(`O body do request é: ${result.statusText()}`)
-    // console.log(`O header do request é: ${result.headers()}`)
-    // console.log(`O body do request como text é: ${result.text()}`)
-    // console.log(`O body do request como json é: ${result.json()}`)
+    /*
+    console.log(`O status code do request é: ${result.status()}`)
+    console.log(`O body do request é: ${result.statusText()}`)
+    console.log(`O header do request é: ${result.headers()}`)
+    console.log(`O body do request como text é: ${result.text()}`)
+    console.log(`O body do request como json é: ${result.json()}`)
 
-    // console.log('')
+    console.log('')
+    */
 
     // Dado que eu tenho uma nova tarefa
-    const payload = {
+    const payload: TaskModel = {
         name: 'Cadastro pelo back',
         is_done: false
     }
@@ -67,7 +70,7 @@ test('Deve poder cadastrar uma nova tarefa @debug @regression', async ({ page, r
 })
 
 test('não deve permitir tarefa duplicada @debug @regression', async ({ page, request }) => {
-    const payload = {
+    const payload: TaskModel = {
         name: 'Comprar Ketchup',
         is_done: false
     }
