@@ -2,9 +2,10 @@ import { test, expect } from '@playwright/test'
 import { TaskModel } from './fixtures/task.model'
 
 import { deleteTaskByHelper, postTask } from './support/helpers'
+import { TaskPage } from './support/pages/tasks'
 
 
-test('Deve poder cadastrar uma nova tarefa @debug @regression', async ({ page, request }) => {
+test('Deve poder cadastrar uma nova tarefa @cadastroSimples @debug @regression', async ({ page, request }) => {
 
     /*
     Quando você usa await request.delete('someUrl'),
@@ -32,6 +33,8 @@ test('Deve poder cadastrar uma nova tarefa @debug @regression', async ({ page, r
     console.log('')
     */
 
+    // const taskPage = new TaskPage(page) isso também funciona!
+    const taskPage: TaskPage = new TaskPage(page)
     // Dado que eu tenho uma nova tarefa
     const payload: TaskModel = {
         name: 'Cadastro pelo back',
@@ -43,25 +46,24 @@ test('Deve poder cadastrar uma nova tarefa @debug @regression', async ({ page, r
     await postTask(request, payload)
 
     // E que eu a cadastre pelo front end
-    await page.goto('http://localhost:3000')
+    const payloadFront: TaskModel = {
+        name: 'Cadastro pelo front',
+        is_done: false
+    }
 
-    const inputTaskName = page.locator('input[class*=InputNewTask]')
+    await taskPage.GoToTaskPage()
+    await deleteTaskByHelper(request, payloadFront.name)
+    await taskPage.createTaskFront(payloadFront)
 
-    const taskNameFront = 'Cadastro pelo front'
-    await request.delete(`http://localhost:3333/helper/tasks/${taskNameFront}`)
-    await inputTaskName.fill(taskNameFront)
-
-    await page.click('css=button >> text=Create')
 
     // Então essas tarefas devem ser exibidas na lista
-    const targetFront = page.locator(`[data-testid="task-item"]:has-text("${taskNameFront}")`)
-    await expect(targetFront).toBeVisible()
-
-    const targetBack = page.locator(`[data-testid="task-item"]:has-text("${payload.name}")`)
-    await expect(targetBack).toBeVisible()
+    await taskPage.validateCreatedTasks(payloadFront)
+    await taskPage.validateCreatedTasks(payload)
 })
 
-test('não deve permitir tarefa duplicada @debug @regression', async ({ page, request }) => {
+test('não deve permitir tarefa duplicada @duplicado @debug @regression', async ({ page, request }) => {
+    const taskPage: TaskPage = new TaskPage(page)
+
     const payload: TaskModel = {
         name: 'Comprar Ketchup',
         is_done: false
@@ -70,11 +72,7 @@ test('não deve permitir tarefa duplicada @debug @regression', async ({ page, re
     await deleteTaskByHelper(request, payload.name)
     await postTask(request, payload)
 
-    await page.goto('http://localhost:3000')
-    const inputTaskName = page.locator('input[class*=InputNewTask]')
-    await inputTaskName.fill(payload.name)
-    await page.click('css=button >> text=Create')
-
-    const target = page.locator('#swal2-html-container')
-    await expect(target).toHaveText('Task already exists!')
+    await taskPage.GoToTaskPage()
+    await taskPage.createTaskFront(payload)
+    await taskPage.validateTwiceTasksAlert('Task already exists!')
 })
