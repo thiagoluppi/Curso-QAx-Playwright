@@ -1,0 +1,18 @@
+{
+    "cadastroFront": {
+        "name": "Cadastro pelo back",
+        "is_done": false
+    },
+    "cadastroBack": {
+        "name": "Cadastro pelo front",
+        "is_done": false
+    },
+    "duplicado": {
+        "name": "Comprar Ketchup",
+        "is_done": false
+    },
+    "obrigatorio": {
+        "name": "",
+        "is_done": false
+    }
+}
