@@ -4,6 +4,8 @@ import { TaskModel } from './fixtures/task.model'
 import { deleteTaskByHelper, postTask } from './support/helpers'
 import { TaskPage } from './support/pages/tasks'
 
+import data from './fixtures/tasks.json'
+
 
 test('Deve poder cadastrar uma nova tarefa @cadastroSimples @debug @regression', async ({ page, request }) => {
 
@@ -33,23 +35,17 @@ test('Deve poder cadastrar uma nova tarefa @cadastroSimples @debug @regression',
     console.log('')
     */
 
-    // const taskPage = new TaskPage(page) isso também funciona!
     const taskPage: TaskPage = new TaskPage(page)
+
     // Dado que eu tenho uma nova tarefa
-    const payload: TaskModel = {
-        name: 'Cadastro pelo back',
-        is_done: false
-    }
+    const payload = data.cadastroBack as TaskModel
 
     // E que eu a cadastre pelo back end
     await deleteTaskByHelper(request, payload.name)
     await postTask(request, payload)
 
     // E que eu a cadastre pelo front end
-    const payloadFront: TaskModel = {
-        name: 'Cadastro pelo front',
-        is_done: false
-    }
+    const payloadFront = data.cadastroFront as TaskModel
 
     await taskPage.GoToTaskPage()
     await deleteTaskByHelper(request, payloadFront.name)
@@ -64,10 +60,7 @@ test('Deve poder cadastrar uma nova tarefa @cadastroSimples @debug @regression',
 test('não deve permitir tarefa duplicada @duplicado @debug @regression', async ({ page, request }) => {
     const taskPage: TaskPage = new TaskPage(page)
 
-    const payload: TaskModel = {
-        name: 'Comprar Ketchup',
-        is_done: false
-    }
+    const payload = data.duplicado as TaskModel
 
     await deleteTaskByHelper(request, payload.name)
     await postTask(request, payload)
@@ -80,10 +73,7 @@ test('não deve permitir tarefa duplicada @duplicado @debug @regression', async 
 test('campo obrigatório @obrigatorio @debug @regression', async ({ page }) => {
     const taskPage: TaskPage = new TaskPage(page)
 
-    const payload: TaskModel = {
-        name: '',
-        is_done: false
-    }
+    const payload = data.obrigatorio as TaskModel
 
     await taskPage.GoToTaskPage()
     await taskPage.createTaskFront(payload)
