@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 import { TaskModel } from './fixtures/task.model'
 
 import { deleteTaskByHelper, postTask } from './support/helpers'
@@ -75,4 +75,26 @@ test('não deve permitir tarefa duplicada @duplicado @debug @regression', async 
     await taskPage.GoToTaskPage()
     await taskPage.createTaskFront(payload)
     await taskPage.validateTwiceTasksAlert('Task already exists!')
+})
+
+test('campo obrigatório @obrigatorio @debug @regression', async ({ page }) => {
+    const taskPage: TaskPage = new TaskPage(page)
+
+    const payload: TaskModel = {
+        name: '',
+        is_done: false
+    }
+
+    await taskPage.GoToTaskPage()
+    await taskPage.createTaskFront(payload)
+
+    /*
+    Quando não preenchemos o campo de Task, o navegador emite uma especie de mensagem no campo
+    informando que o campo é obrigatório, porém, essa mensagem é do próprio browser e não está no HTML, e por
+    esse motivo não conseguimos acesso a esse elemento. Para que nós conseguigamos fazer isso será necessário
+    converter essa mensagem para HTML real:
+    */
+
+    const validationMessage = await taskPage.inputTaskNameField.evaluate(e => (e as HTMLInputElement).validationMessage)
+    expect(validationMessage).toEqual('This is a required field')
 })
