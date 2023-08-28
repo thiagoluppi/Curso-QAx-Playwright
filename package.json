@@ -8,7 +8,8 @@
     "regression": "npx playwright test --grep @regression",
     "temp": "npx playwright test --grep @temp --debug",
     "cadastro": "npx playwright test --grep @cadastroSimples",
-    "duplicado": "npx playwright test --grep @duplicado"
+    "duplicado": "npx playwright test --grep @duplicado",
+    "obrigatorio": "npx playwright test --grep @obrigatorio"
   },
   "keywords": [],
   "author": "",
