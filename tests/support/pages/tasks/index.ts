@@ -22,9 +22,24 @@ export class TaskPage {
     }
 
     async toggle(taskName: string) {
+        // O papito usou Xpath:
+        // const target = this.page.locator(`xpath=//p[text()="${taskName}"]/..//button[contains(@class, "Toggle")]`)
         const taskItemLocator = this.page.locator(`[data-testid="task-item"]:has-text("${taskName}")`)
         const toggleButton = taskItemLocator.locator('button:nth-child(1)')
         await toggleButton.click()
+    }
+
+    async deleteTask(taskName: string) {
+        // O papito usou Xpath:
+        // const target = this.page.locator(`xpath=//p[text()="${taskName}"]/..//button[contains(@class, "Delete")]`)
+        const taskItemLocator = this.page.locator(`[data-testid="task-item"]:has-text("${taskName}")`)
+        const deleteButton = taskItemLocator.locator('button:has([xmlns="http://www.w3.org/2000/svg"])')
+
+        // Esperar até que o botão esteja visível
+        await deleteButton.waitFor({ state: 'visible' })
+
+        // Clicar no botão
+        await deleteButton.click()
     }
 
     async validateCreatedTasks(payload: TaskModel) {

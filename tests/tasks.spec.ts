@@ -91,7 +91,8 @@ test.describe('Cadastro', () => {
     })
 })
 
-test.describe('Toggle Task', () => {
+test.describe('Interagindo com Tarefas', () => {
+
     test('deve concluir uma tarefa @toggle @debug @regression', async ({ page, request }) => {
         const taskPage: TaskPage = new TaskPage(page)
         const payload = data.toggle as TaskModel
@@ -103,5 +104,18 @@ test.describe('Toggle Task', () => {
         await taskPage.toggle(payload.name)
 
         await taskPage.validateToggleButton(payload.name)
+    })
+
+    test('deve excluir uma tarefa @excluir @debug @regression', async ({ page, request }) => {
+        const taskPage: TaskPage = new TaskPage(page)
+        const payload = data.delete as TaskModel
+
+        await deleteTaskByHelper(request, payload.name)
+        await postTask(request, payload)
+
+        await taskPage.GoToTaskPage()
+        await taskPage.deleteTask(payload.name)
+
+        // await taskPage.validateToggleButton(payload.name)
     })
 })

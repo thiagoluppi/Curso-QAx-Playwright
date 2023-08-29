@@ -18,5 +18,9 @@
     "toggle": {
         "name": "toggleTask",
         "is_done": false
+    },
+    "delete": {
+        "name": "Estudar Ruby",
+        "is_done": false
     }
 }
