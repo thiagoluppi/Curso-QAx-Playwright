@@ -9,7 +9,8 @@
     "temp": "npx playwright test --grep @temp --debug",
     "cadastro": "npx playwright test --grep @cadastroSimples",
     "duplicado": "npx playwright test --grep @duplicado",
-    "obrigatorio": "npx playwright test --grep @obrigatorio"
+    "obrigatorio": "npx playwright test --grep @obrigatorio",
+    "toggle": "npx playwright test --grep @toggle --debug"
   },
   "keywords": [],
   "author": "",
