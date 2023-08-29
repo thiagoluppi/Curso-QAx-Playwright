@@ -14,5 +14,9 @@
     "obrigatorio": {
         "name": "",
         "is_done": false
+    },
+    "toggle": {
+        "name": "toggleTask",
+        "is_done": false
     }
 }

@@ -21,6 +21,12 @@ export class TaskPage {
         await this.createButton.click()
     }
 
+    async toggle(taskName: string) {
+        const taskItemLocator = this.page.locator(`[data-testid="task-item"]:has-text("${taskName}")`)
+        const toggleButton = taskItemLocator.locator('button:nth-child(1)')
+        await toggleButton.click()
+    }
+
     async validateCreatedTasks(payload: TaskModel) {
         const taskElement = this.page.locator(`[data-testid="task-item"]:has-text("${payload.name}")`)
         await expect(taskElement).toBeVisible()
@@ -29,5 +35,10 @@ export class TaskPage {
     async validateTwiceTasksAlert(alertText: string) {
         const target = this.page.locator('#swal2-html-container')
         await expect(target).toHaveText(alertText)
+    }
+
+    async validateToggleButton(taskName: string) {
+        const target = this.page.getByText(taskName)
+        await expect(target).toHaveCSS('text-decoration-line', 'line-through')
     }
 }
