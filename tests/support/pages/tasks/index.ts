@@ -56,4 +56,9 @@ export class TaskPage {
         const target = this.page.getByText(taskName)
         await expect(target).toHaveCSS('text-decoration-line', 'line-through')
     }
+
+    async validateDeletedTask(taskName: string) {
+        const target = this.page.getByText(taskName)
+        await expect(target).not.toBeVisible()
+    }
 }

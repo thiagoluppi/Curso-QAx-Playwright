@@ -116,6 +116,6 @@ test.describe('Interagindo com Tarefas', () => {
         await taskPage.GoToTaskPage()
         await taskPage.deleteTask(payload.name)
 
-        // await taskPage.validateToggleButton(payload.name)
+        await taskPage.validateDeletedTask(payload.name)
     })
 })
