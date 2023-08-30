@@ -13,7 +13,7 @@ export class TaskPage {
     }
 
     async GoToTaskPage() {
-        await this.page.goto('http://localhost:3000')
+        await this.page.goto('/')
     }
 
     async createTaskFront(payload: TaskModel) {
