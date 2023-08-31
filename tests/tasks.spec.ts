@@ -1,10 +1,18 @@
 import { expect, test } from '@playwright/test'
-import { TaskModel } from './fixtures/task.model'
 
+import { TaskModel } from './fixtures/task.model'
 import { deleteTaskByHelper, postTask } from './support/helpers'
 import { TaskPage } from './support/pages/tasks'
 
 import data from './fixtures/tasks.json'
+
+// O Papito quis colocar assim num beforeEach, mas eu deixei como estava.
+// let taskPage: TaskPage
+
+// test.beforeEach(({ page }) => {
+//     taskPage = new TaskPage(page)
+// })
+
 
 test.describe('Cadastro', () => {
 
