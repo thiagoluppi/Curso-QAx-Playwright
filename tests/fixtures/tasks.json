@@ -22,5 +22,9 @@
     "delete": {
         "name": "Estudar Ruby",
         "is_done": false
+    },
+    "e2e": {
+        "name": "Cenario e2e",
+        "is_done": false
     }
 }

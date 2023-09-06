@@ -97,6 +97,15 @@ test.describe('Cadastro', () => {
         const validationMessage = await taskPage.inputTaskNameField.evaluate(e => (e as HTMLInputElement).validationMessage)
         expect(validationMessage).toEqual('This is a required field')
     })
+
+    test('e2e testing - interceptar a requisição feita pelo front-end ao back-end @e2e @debug @regression', async ({ page }) => {
+        const taskPage: TaskPage = new TaskPage(page)
+
+        const payload = data.e2e as TaskModel
+
+        await taskPage.GoToTaskPage()
+        await taskPage.createTaskFrontForInterception(payload)
+    })
 })
 
 test.describe('Interagindo com Tarefas', () => {

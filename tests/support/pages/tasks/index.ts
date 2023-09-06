@@ -1,6 +1,10 @@
 import { expect, Locator, Page } from "@playwright/test"
 import { TaskModel } from "../../../fixtures/task.model"
 
+require('dotenv').config()
+
+const BASE_API = process.env.BASE_API
+
 export class TaskPage {
     readonly page: Page
     readonly inputTaskNameField: Locator
@@ -19,6 +23,46 @@ export class TaskPage {
     async createTaskFront(payload: TaskModel) {
         await this.inputTaskNameField.fill(payload.name)
         await this.createButton.click()
+    }
+
+
+    async createTaskFrontForInterception(payload: TaskModel) {
+
+        await this.page.route(`${BASE_API}/tasks`, route => {
+            console.log("Interceptação para ", BASE_API)
+
+            const request = route.request()
+            const postData = request.postData()
+
+            console.log("Dados POST recebidos: ", postData)
+
+            if (postData) {
+                try {
+                    const requestData = JSON.parse(postData)
+                    console.log("Dados da requisição: ", requestData)
+
+                    expect(requestData.name === payload.name && requestData.is_done === payload.is_done)
+
+                    if (requestData.name === payload.name && requestData.is_done === payload.is_done) {
+                        console.log("Dados da requisição estão corretos!")
+                    } else {
+                        console.log("Dados da requisição não correspondem ao esperado!")
+                    }
+                } catch (error) {
+                    console.error("Erro ao analisar os dados da requisição: ", error.message)
+                }
+            } else {
+                console.log("Sem dados no corpo da requisição!")
+            }
+            // Continue com a requisição
+            route.continue()
+        })
+        // Preencha o campo de tarefa e clique no botão
+        await this.inputTaskNameField.fill(payload.name)
+        await this.createButton.click()
+
+        // Parando a interceptação:
+        await this.page.unroute(`${BASE_API}/tasks`)
     }
 
     async toggle(taskName: string) {
