@@ -11,7 +11,8 @@
     "duplicado": "npx playwright test --grep @duplicado",
     "obrigatorio": "npx playwright test --grep @obrigatorio",
     "toggle": "npx playwright test --grep @toggle --debug",
-    "excluir": "npx playwright test --grep @excluir"
+    "excluir": "npx playwright test --grep @excluir",
+    "e2e": "npx playwright test --grep @e2e"
   },
   "keywords": [],
   "author": "",
